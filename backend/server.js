@@ -10,12 +10,11 @@ app.use(express.json());
 
 const PORT = 5000;
 
-// Local MongoDB Connection
-const MONGO_URI = 'mongodb://127.0.0.1:27017/linkdrop';
+const mongoURI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/linkdrop";
 
-mongoose.connect(MONGO_URI)
-  .then(() => console.log('🎯 Local MongoDB Database Connected Successfully!'))
-  .catch((err) => console.error('❌ MongoDB Connection Error:', err.message));
+mongoose.connect(mongoURI)
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.log("MongoDB Connection Error:", err));
 
 // 1. Home Route
 app.get('/', (req, res) => {
