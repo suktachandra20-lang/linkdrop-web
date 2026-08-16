@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>frontend</title>
+    <script src="https://tailwindcss.com"></script>
+    <style>
+  /* Navigation Styling */
+  nav { background-color: #1e293b !important; padding: 16px 24px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; border-bottom: 1px solid #334155 !important; }
+  nav h1 { font-size: 24px !important; font-weight: 900 !important; color: #818cf8 !important; margin: 0 !important; }
+  
+  /* Layout Layout Grid */
+  .grid-container { max-w-4xl: 896px; margin: 48px auto !important; padding: 0 16px !important; display: flex !important; flex-wrap: wrap !important; gap: 32px !important; justify-content: center !important;}
+  
+  /* Sidebar Card */
+  .profile-card { background-color: #1e293b !important; padding: 24px !important; border-radius: 16px !important; border: 1px solid #334155 !important; text-align: center !important; width: 260px !important; height: fit-content !important; }
+  .avatar { w-24: 96px; h-24: 96px; background-color: #6366f1 !important; border-radius: 50% !important; margin: 0 auto 16px auto !important; font-size: 28px !important; font-weight: bold !important; line-height: 96px !important; text-align: center !important; }
+  
+  /* Link Dashboard Area */
+  .dashboard-area { flex: 1 !important; min-width: 300px !important; display: flex !important; flex-direction: column !important; gap: 24px !important; }
+  .links-box { background-color: #1e293b !important; padding: 24px !important; border-radius: 16px !important; border: 1px solid #334155 !important; }
+  .link-item { background-color: #0f172a !important; padding: 16px !important; border-radius: 12px !important; border: 1px solid rgba(51, 65, 85, 0.6) !important; margin-bottom: 12px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; }
+  .link-item h4 { margin: 0 !important; font-size: 16px !important; color: #e2e8f0 !important; }
+  .link-item p { margin: 4px 0 0 0 !important; font-size: 12px !important; color: #64748b !important; }
+  .click-badge { background-color: #1e293b !important; padding: 6px 12px !important; border-radius: 8px !important; font-size: 12px !important; color: #818cf8 !important; font-family: monospace !important; border: 1px solid #334155 !important; }
+  
+  /* Status Note */
+  .status-note { background-color: rgba(99, 102, 241, 0.1) !important; border: 1px solid rgba(99, 102, 241, 0.2) !important; padding: 20px !important; border-radius: 16px !important; font-size: 14px !important; color: #a5b4fc !important; line-height: 1.6 !important; }
+</style>
+
+ </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
