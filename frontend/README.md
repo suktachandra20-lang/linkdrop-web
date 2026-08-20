@@ -1,16 +1,37 @@
-# React + Vite
+# 🔗 LinkDrop - Bio Link & Analytics Manager
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+LinkDrop is a full-stack web application designed to manage, store, and share bio links with integrated support for real-time predictive analytics systems.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Key Features
 
-## React Compiler
+* **Bio Link Management:** Dynamically add, display, and manage active bio links.
+* **ML Dashboard Integration:** Integrated with custom Machine Learning prediction dashboards (e.g., Video Game Success Analytics).
+* **Full-Stack Architecture:** Powered by Express.js API, MongoDB database, and React frontend.
+* **Live Deployment:** Hosted seamlessly on Vercel (Frontend) and Render (Backend).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* **Frontend:** React.js, Tailwind CSS, Vite
+* **Backend:** Node.js, Express.js
+* **Database:** MongoDB Atlas
+* **Deployment:** Vercel, Render, ngrok (for local ML pipeline exposure)
+
+---
+
+## 📌 Live Demo
+
+* **Web Application:** [https://linkdrop-web.vercel.app](https://linkdrop-web.vercel.app)
+* **Backend API:** `https://linkdrop-web-1.onrender.com/api/links`
+
+---
+
+## 💻 Local Setup & Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/suktachandra20-lang/linkdrop-web.git](https://github.com/suktachandra20-lang/linkdrop-web.git)
+   cd linkdrop-web
