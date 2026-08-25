@@ -12,13 +12,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Direct Driver SRV connection bypass
-const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://suktachandra20_db_user:Krishna1234@cluster0.y852dg8.mongodb.net/linkdrop?retryWrites=true&w=majority";
+// Direct non-SRV connection string fallback
+const MONGO_URI = process.env.MONGO_URI || "mongodb://suktachandra20_db_user:Krishna1234@cluster0-shard-00-00.y852dg8.mongodb.net:27017,cluster0-shard-00-01.y852dg8.mongodb.net:27017,cluster0-shard-00-02.y852dg8.mongodb.net:27017/linkdrop?ssl=true&replicaSet=atlas-139bhn-shard-0&authSource=admin&retryWrites=true&w=majority";
 
-mongoose.connect(MONGO_URI, {
-  serverSelectionTimeoutMS: 5000,
-  family: 4
-})
+mongoose.connect(MONGO_URI)
   .then(() => console.log('MongoDB Connected Successfully!'))
   .catch((err) => console.log('Database Connection Error:', err));
 
