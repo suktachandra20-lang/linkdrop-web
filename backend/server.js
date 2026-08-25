@@ -12,11 +12,12 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+
 const MONGO_URI = process.env.MONGO_URI || "mongodb://suktachandra20_db_user:Krishna1234@cluster0-shard-00-00.y852dg8.mongodb.net:27017,cluster0-shard-00-01.y852dg8.mongodb.net:27017,cluster0-shard-00-02.y852dg8.mongodb.net:27017/linkdrop?ssl=true&replicaSet=atlas-139bhn-shard-0&authSource=admin&retryWrites=true&w=majority";
 
 mongoose.connect(MONGO_URI)
   .then(() => console.log('MongoDB Connected Successfully!'))
-  .catch(err => console.log('Database Connection Error:', err));
+  .catch((err) => console.log('Database Connection Error:', err));
 // Routes
 app.use('/api/auth', authRoutes);
 
