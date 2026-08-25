@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(cors());
 
 
-const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://suktachandra20_db_user:1HurtDKMA7fx3vIY@cluster0.y852dg8.mongodb.net/linkdrop?retryWrites=true&w=majority";
+const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://suktachandra20_db_user:Krishna1234@cluster0.y852dg8.mongodb.net/linkdrop?retryWrites=true&w=majority";
 
 mongoose.connect(MONGO_URI)
   .then(() => console.log('MongoDB Connected Successfully!'))
