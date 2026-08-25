@@ -14,8 +14,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGO_URI)
+
+const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://suktachandra20_db_user:1HurtDKMA7fx3vIY@cluster0.y852dg8.mongodb.net/linkdrop?retryWrites=true&w=majority";
+
+mongoose.connect(MONGO_URI)
   .then(() => console.log('MongoDB Connected Successfully!'))
   .catch(err => console.log('Database Connection Error:', err));
 
