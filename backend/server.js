@@ -1,94 +1,63 @@
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '8.8.4.4']);
+
 const express = require('express');
-const cors = require('cors');
 const mongoose = require('mongoose');
-const Link = require('./Link'); 
+const cors = require('cors');
+require('dotenv').config();
+
+const Link = require('./Link');
+const authRoutes = require('./auth');
+const authMiddleware = require('./authMiddleware');
 
 const app = express();
 
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 
-const PORT = 5000;
+// MongoDB Connection
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB Connected Successfully!'))
+  .catch(err => console.log('Database Connection Error:', err));
 
-const mongoURI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/linkdrop";
+// Routes
+app.use('/api/auth', authRoutes);
 
-mongoose.connect(mongoURI)
-  .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.log("MongoDB Connection Error:", err));
-
-// 1. Home Route
-app.get('/', (req, res) => {
-  res.send('Linkdrop Backend Server is Running!');
-});
-
-// 2. Get All Links
-app.get('/api/links', async (req, res) => {
+app.get('/api/links', authMiddleware, async (req, res) => {
   try {
-    const links = await Link.find().sort({ createdAt: -1 });
+    const links = await Link.find({ user: req.user.id });
     res.json(links);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// 3. Add New Link
-app.post('/api/links', async (req, res) => {
-  const { title, url } = req.body;
-  if (!title || !url) {
-    return res.status(400).json({ error: 'Please fill all fields' });
-  }
-
+app.post('/api/links', authMiddleware, async (req, res) => {
   try {
-    const newLink = new Link({ title, url });
+    const { title, url } = req.body;
+    const newLink = new Link({
+      title,
+      url,
+      user: req.user.id
+    });
     await newLink.save();
-    res.json(newLink); 
+    res.json(newLink);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// ---------------- NEW ROUTES ADDED BELOW ----------------
-
-// 4. Delete a Link
-app.delete('/api/links/:id', async (req, res) => {
+app.delete('/api/links/:id', authMiddleware, async (req, res) => {
   try {
-    const { id } = req.params;
-    await Link.findByIdAndDelete(id);
+    const link = await Link.findOneAndDelete({ _id: req.params.id, user: req.user.id });
+    if (!link) {
+      return res.status(404).json({ message: 'Link not found or unauthorized' });
+    }
     res.json({ message: 'Link deleted successfully!' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// 5. Update/Edit a Link
-app.put('/api/links/:id', async (req, res) => {
-  const { title, url } = req.body;
-  try {
-    const updatedLink = await Link.findByIdAndUpdate(
-      req.params.id,
-      { title, url },
-      { new: true }
-    );
-    res.json(updatedLink);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// 6. Increment Click Count (+1)
-app.patch('/api/links/:id/click', async (req, res) => {
-  try {
-    const updatedLink = await Link.findByIdAndUpdate(
-      req.params.id,
-      { $inc: { clicks: 1 } }, // clicks ফিল্ড ১ বাড়িয়ে দেবে
-      { new: true }
-    );
-    res.json(updatedLink);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// --------------------------------------------------------
-
-app.listen(PORT, () => console.log(`🚀 Server is running on port ${PORT}`));
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
