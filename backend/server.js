@@ -1,5 +1,8 @@
 const dns = require('dns');
-dns.setDefaultResultOrder('ipv4first'); // Render IPV6 DNS Issue Fix
+
+// Render DNS সমস্যা বাইপাস করার জন্য Google এবং Cloudflare DNS সেট করা
+dns.setServers(['8.8.8.8', '1.1.1.1']);
+dns.setDefaultResultOrder('ipv4first');
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -15,7 +18,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// MongoDB Connection with IPv4 Fix
+// MongoDB Connection
 const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://suktachandra20_db_user:Krishna1234@cluster0.y852dg8.mongodb.net/linkdrop?retryWrites=true&w=majority";
 
 mongoose.connect(MONGO_URI, { family: 4 })
