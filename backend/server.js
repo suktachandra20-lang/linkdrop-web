@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
+
 const Link = require('./Link');
 const authRoutes = require('./auth');
 const authMiddleware = require('./authMiddleware');
@@ -17,7 +18,7 @@ app.use(express.json());
 app.use(cors());
 
 // MongoDB Connection
-const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://TUNI:RenderPass1234@cluster0.y052dg8.mongodb.net/?appName=Cluster0";
+const MONGO_URI = process.env.MONGO_URI;
 
 mongoose.connect(MONGO_URI, {
   family: 4,
@@ -29,6 +30,7 @@ mongoose.connect(MONGO_URI, {
 // Routes
 app.use('/api/auth', authRoutes);
 
+// Get User Links
 app.get('/api/links', authMiddleware, async (req, res) => {
   try {
     const links = await Link.find({ user: req.user.id });
@@ -38,6 +40,7 @@ app.get('/api/links', authMiddleware, async (req, res) => {
   }
 });
 
+// Create Link
 app.post('/api/links', authMiddleware, async (req, res) => {
   try {
     const { title, url } = req.body;
@@ -49,6 +52,7 @@ app.post('/api/links', authMiddleware, async (req, res) => {
   }
 });
 
+// Delete Link
 app.delete('/api/links/:id', authMiddleware, async (req, res) => {
   try {
     const link = await Link.findOneAndDelete({ _id: req.params.id, user: req.user.id });
