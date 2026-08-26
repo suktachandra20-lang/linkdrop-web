@@ -8,7 +8,8 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log('Logging in:', email, password);
+    
+    navigate('/dashboard');
   };
 
   return (
