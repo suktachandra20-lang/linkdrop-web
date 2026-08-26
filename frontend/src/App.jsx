@@ -1,160 +1,109 @@
-import React, { useState, useEffect } from 'react';
-import AuthModal from './AuthModal';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 
-export default function App() {
-  const [user, setUser] = useState(null);
-  const [links, setLinks] = useState([]);
-  const [title, setTitle] = useState('');
-  const [url, setUrl] = useState('');
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const API_BASE_URL = 'https://linkdrop-web-1.onrender.com';
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
-    if (storedUser && token) {
-      setUser(JSON.parse(storedUser));
-      fetchLinks(token);
-    }
-  }, []);
-
-  const fetchLinks = async (token) => {
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/links`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      const data = await res.json();
-      if (res.ok) setLinks(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleAddLink = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
-
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/links`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ title, url })
-      });
-      const newLink = await res.json();
-      if (res.ok) {
-        setLinks([...links, newLink]);
-        setTitle('');
-        setUrl('');
-      }
-    } catch (err) {
-      console.error(err);
-    }
+    // আপনার লগইন লজিক এখানে থাকবে
+    console.log('Logging in:', email, password);
   };
-
-  const handleDelete = async (id) => {
-    const token = localStorage.getItem('token');
-
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/links/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (res.ok) {
-        setLinks(links.filter((link) => link._id !== id));
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setUser(null);
-    setLinks([]);
-  };
-
-  if (!user) {
-    return <AuthModal onLoginSuccess={(userData) => {
-      setUser(userData);
-      fetchLinks(localStorage.getItem('token'));
-    }} />;
-  }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-md">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Welcome, {user.name}!</h1>
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600"
-          >
-            Logout
-          </button>
-        </div>
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: '#0f172a',
+      color: '#f8fafc',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontFamily: 'system-ui, sans-serif'
+    }}>
+      <div style={{
+        backgroundColor: '#1e293b',
+        padding: '32px',
+        borderRadius: '16px',
+        border: '1px solid #334155',
+        width: '100%',
+        maxWidth: '400px',
+        boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)'
+      }}>
+        <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '24px', textAlign: 'center', color: '#818cf8' }}>
+          Login to LinkDrop
+        </h2>
 
-        {/* Link Input Form */}
-        <form onSubmit={handleAddLink} className="flex flex-col gap-3 mb-6">
-          <input
-            type="text"
-            placeholder="Link Title"
-            className="border p-2 rounded"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-          <input
-            type="url"
-            placeholder="URL (https://...)"
-            className="border p-2 rounded"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            required
-          />
+        <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div>
+            <label style={{ display: 'block', fontSize: '14px', marginBottom: '6px', color: '#94a3b8' }}>Email</label>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              style={{
+                width: '100%',
+                padding: '10px 14px',
+                backgroundColor: '#0f172a',
+                border: '1px solid #334155',
+                borderRadius: '8px',
+                color: '#fff',
+                outline: 'none',
+                boxSizing: 'border-box'
+              }}
+            />
+          </div>
+
+          <div>
+            <label style={{ display: 'block', fontSize: '14px', marginBottom: '6px', color: '#94a3b8' }}>Password</label>
+            <input
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{
+                width: '100%',
+                padding: '10px 14px',
+                backgroundColor: '#0f172a',
+                border: '1px solid #334155',
+                borderRadius: '8px',
+                color: '#fff',
+                outline: 'none',
+                boxSizing: 'border-box'
+              }}
+            />
+          </div>
+
           <button
             type="submit"
-            className="bg-green-600 text-white py-2 rounded font-semibold hover:bg-green-700"
+            style={{
+              marginTop: '8px',
+              padding: '12px',
+              backgroundColor: '#6366f1',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '8px',
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}
           >
-            Add Link
+            Login
           </button>
         </form>
 
-        {/* Links List */}
-        <div className="space-y-3">
-          {links.map((link) => (
-            <div key={link._id} className="flex justify-between items-center border p-3 rounded">
-              <div>
-                <a
-                  href={link.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="font-semibold text-blue-600 hover:underline"
-                >
-                  {link.title}
-                </a>
-                <p className="text-xs text-gray-500">{link.url}</p>
-              </div>
-              <button
-                onClick={() => handleDelete(link._id)}
-                className="text-red-500 text-sm hover:underline"
-              >
-                Delete
-              </button>
-            </div>
-          ))}
-          {links.length === 0 && (
-            <p className="text-center text-gray-500 text-sm">No links added yet.</p>
-          )}
-        </div>
+        <p style={{ marginTop: '20px', textAlign: 'center', fontSize: '14px', color: '#94a3b8' }}>
+          Don't have an account?{' '}
+          <Link to="/register" style={{ color: '#818cf8', textDecoration: 'none', fontWeight: '600' }}>
+            Register
+          </Link>
+        </p>
       </div>
     </div>
   );
-}
+};
+
+export default Login;
