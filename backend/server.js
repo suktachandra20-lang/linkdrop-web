@@ -1,4 +1,3 @@
-// Render IPv4 DNS Resolver Fix
 const dns = require('dns');
 dns.setDefaultResultOrder('ipv4first');
 
@@ -7,8 +6,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
-
 const Link = require('./Link');
+const User = require('./User');
 const authRoutes = require('./auth');
 const authMiddleware = require('./authMiddleware');
 
@@ -30,7 +29,7 @@ mongoose.connect(MONGO_URI, {
 // Routes
 app.use('/api/auth', authRoutes);
 
-// Get User Links
+// Get Private Links for Dashboard
 app.get('/api/links', authMiddleware, async (req, res) => {
   try {
     const links = await Link.find({ user: req.user.id });
@@ -60,6 +59,19 @@ app.delete('/api/links/:id', authMiddleware, async (req, res) => {
       return res.status(404).json({ message: 'Link not found or unauthorized' });
     }
     res.json({ message: 'Link deleted successfully!' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Public Bio Profile API
+app.get('/api/user/:username', async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username }).select('-password');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const links = await Link.find({ user: user._id });
+    res.json({ user, links });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
