@@ -7,7 +7,8 @@ export default function App() {
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
 
-  
+  const API_BASE_URL = 'https://linkdrop-web-1.onrender.com';
+
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     const token = localStorage.getItem('token');
@@ -17,10 +18,9 @@ export default function App() {
     }
   }, []);
 
-  
   const fetchLinks = async (token) => {
     try {
-      const res = await fetch('http://localhost:5000/api/links', {
+      const res = await fetch(`${API_BASE_URL}/api/links`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -32,13 +32,12 @@ export default function App() {
     }
   };
 
-  
   const handleAddLink = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
 
     try {
-      const res = await fetch('http://localhost:5000/api/links', {
+      const res = await fetch(`${API_BASE_URL}/api/links`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -57,12 +56,11 @@ export default function App() {
     }
   };
 
-  
   const handleDelete = async (id) => {
     const token = localStorage.getItem('token');
 
     try {
-      const res = await fetch(`http://localhost:5000/api/links/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/links/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -76,7 +74,6 @@ export default function App() {
     }
   };
 
-  
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
