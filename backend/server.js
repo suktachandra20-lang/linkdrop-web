@@ -64,6 +64,20 @@ app.delete('/api/links/:id', authMiddleware, async (req, res) => {
   }
 });
 
+// Track Link Click Count API
+app.post('/api/links/click/:id', async (req, res) => {
+  try {
+    const link = await Link.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { clicks: 1 } },
+      { new: true }
+    );
+    res.json(link);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Public Bio Profile API
 app.get('/api/user/:username', async (req, res) => {
   try {

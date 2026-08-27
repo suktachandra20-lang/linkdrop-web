@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const [links, setLinks] = useState([]);
@@ -97,7 +97,7 @@ const Dashboard = () => {
             <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#818cf8', margin: 0 }}>
               Welcome, {user?.username || 'User'} 👋
             </h1>
-            <p style={{ fontSize: '14px', color: '#94a3b8', margin: '4px 0 0 0' }}>Manage your links & bio page</p>
+            <p style={{ fontSize: '14px', color: '#94a3b8', margin: '4px 0 0 0' }}>Manage your links & track performance</p>
           </div>
           <button onClick={handleLogout} style={{ padding: '8px 16px', backgroundColor: '#ef4444', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>
             Logout
@@ -137,7 +137,10 @@ const Dashboard = () => {
               <div key={item._id} style={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '10px', padding: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                   <h4 style={{ margin: '0 0 4px 0', fontSize: '16px', color: '#38bdf8' }}>{item.title}</h4>
-                  <a href={item.url} target="_blank" rel="noreferrer" style={{ color: '#94a3b8', fontSize: '13px', textDecoration: 'none' }}>{item.url}</a>
+                  <a href={item.url} target="_blank" rel="noreferrer" style={{ color: '#94a3b8', fontSize: '13px', textDecoration: 'none', display: 'block', marginBottom: '6px' }}>{item.url}</a>
+                  <span style={{ fontSize: '12px', backgroundColor: '#334155', padding: '2px 8px', borderRadius: '4px', color: '#a5b4fc', fontWeight: 'bold' }}>
+                    👆 {item.clicks || 0} Clicks
+                  </span>
                 </div>
                 <button onClick={() => handleDelete(item._id)} style={{ padding: '6px 12px', backgroundColor: '#ef444422', color: '#f87171', border: '1px solid #ef4444', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}>
                   Delete
