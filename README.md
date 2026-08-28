@@ -26,5 +26,5 @@ LinkDrop is a modern full-stack web application designed to consolidate all your
 ## 🔗 Live Application
 
 * **Web App:** [LinkDrop Web Platform](https://linkdrop-web.vercel.app)
-* text
+
 
