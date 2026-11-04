@@ -26,10 +26,10 @@ mongoose.connect(MONGO_URI, {
   .then(() => console.log('MongoDB Connected Successfully!'))
   .catch((err) => console.log('Database Connection Error:', err));
 
-// Routes
+// Auth Routes
 app.use('/api/auth', authRoutes);
 
-// Get Private Links for Dashboard
+
 app.get('/api/links', authMiddleware, async (req, res) => {
   try {
     const links = await Link.find({ user: req.user.id });
@@ -39,7 +39,7 @@ app.get('/api/links', authMiddleware, async (req, res) => {
   }
 });
 
-// Create Link
+
 app.post('/api/links', authMiddleware, async (req, res) => {
   try {
     const { title, url } = req.body;
@@ -51,7 +51,7 @@ app.post('/api/links', authMiddleware, async (req, res) => {
   }
 });
 
-// Delete Link
+
 app.delete('/api/links/:id', authMiddleware, async (req, res) => {
   try {
     const link = await Link.findOneAndDelete({ _id: req.params.id, user: req.user.id });
@@ -64,21 +64,24 @@ app.delete('/api/links/:id', authMiddleware, async (req, res) => {
   }
 });
 
-// Track Link Click Count API
-app.post('/api/links/click/:id', async (req, res) => {
+
+app.get('/api/click/:id', async (req, res) => {
   try {
     const link = await Link.findByIdAndUpdate(
       req.params.id,
       { $inc: { clicks: 1 } },
       { new: true }
     );
-    res.json(link);
+    if (!link) return res.status(404).send('Link not found');
+    
+    
+    res.redirect(link.url);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).send(err.message);
   }
 });
 
-// Public Bio Profile API
+
 app.get('/api/user/:username', async (req, res) => {
   try {
     const user = await User.findOne({ username: req.params.username }).select('-password');

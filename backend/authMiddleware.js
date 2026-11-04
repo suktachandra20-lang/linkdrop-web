@@ -1,21 +1,15 @@
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'linkdrop_super_secret_key_123';
-
 module.exports = function (req, res, next) {
-  
-  const token = req.header('Authorization');
+  const token = req.header('Authorization')?.split(' ')[1] || req.header('x-auth-token');
 
   if (!token) {
     return res.status(401).json({ message: 'No token, authorization denied' });
   }
 
   try {
-    
-    const bearerToken = token.split(' ')[1] || token;
-    
-    const decoded = jwt.verify(bearerToken, JWT_SECRET);
-    req.user = decoded; 
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secretkey');
+    req.user = decoded; // এতে user.id থাকবে
     next();
   } catch (err) {
     res.status(401).json({ message: 'Token is not valid' });
