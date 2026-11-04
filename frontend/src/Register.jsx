@@ -13,7 +13,7 @@ const Register = () => {
     setError('');
 
     try {
-      const res = await fetch('https://linkdrop-web-1.onrender.com/api/auth/register', {
+      const res = await fetch('https://linkdrop-web.onrender.com/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password })
