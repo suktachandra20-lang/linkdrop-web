@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-
 const API_URL = import.meta.env.VITE_API_URL || 'https://linkdrop-web.onrender.com/api';
 
 const PublicBio = () => {
@@ -26,10 +25,17 @@ const PublicBio = () => {
       });
   }, [username]);
 
-  const handleLinkClick = (id) => {
-    fetch(`${API_URL}/links/click/${id}`, {
-      method: 'POST'
-    }).catch((err) => console.error(err));
+  const handleLinkClick = async (e, id, url) => {
+    e.preventDefault(); 
+    try {
+     
+      await fetch(`${API_URL}/click/${id}`);
+    } catch (err) {
+      console.error('Click tracking error:', err);
+    } finally {
+      
+      window.open(url, '_blank');
+    }
   };
 
   if (loading) return <div style={{ minHeight: '100vh', backgroundColor: '#0f172a', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading profile...</div>;
@@ -52,9 +58,7 @@ const PublicBio = () => {
             <a
               key={link._id}
               href={link.url}
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => handleLinkClick(link._id)}
+              onClick={(e) => handleLinkClick(e, link._id, link.url)}
               style={{
                 backgroundColor: '#1e293b',
                 border: '1px solid #334155',
@@ -68,7 +72,8 @@ const PublicBio = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                cursor: 'pointer'
               }}
             >
               🔗 {link.title}
