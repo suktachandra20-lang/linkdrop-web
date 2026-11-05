@@ -29,7 +29,6 @@ mongoose.connect(MONGO_URI, {
 // Auth Routes
 app.use('/api/auth', authRoutes);
 
-
 app.get('/api/users/count', async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
@@ -100,4 +99,10 @@ app.get('/api/user/:username', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+module.exports = app;
