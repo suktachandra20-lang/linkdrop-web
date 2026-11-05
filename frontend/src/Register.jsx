@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
+
+const API_URL = import.meta.env.VITE_API_URL || 'https://linkdrop-web.onrender.com/api';
+
 const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -13,7 +16,7 @@ const Register = () => {
     setError('');
 
     try {
-      const res = await fetch('https://linkdrop-web.onrender.com/api/auth/register', {
+      const res = await fetch(`${API_URL}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password })

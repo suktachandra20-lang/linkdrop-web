@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+
+const API_URL = import.meta.env.VITE_API_URL || 'https://linkdrop-web.onrender.com/api';
+
 const PublicBio = () => {
   const { username } = useParams();
   const [data, setData] = useState(null);
@@ -8,7 +11,7 @@ const PublicBio = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetch(`https://linkdrop-web-1.onrender.com/api/user/${username}`)
+    fetch(`${API_URL}/user/${username}`)
       .then((res) => {
         if (!res.ok) throw new Error('User not found');
         return res.json();
@@ -24,7 +27,7 @@ const PublicBio = () => {
   }, [username]);
 
   const handleLinkClick = (id) => {
-    fetch(`https://linkdrop-web-1.onrender.com/api/links/click/${id}`, {
+    fetch(`${API_URL}/links/click/${id}`, {
       method: 'POST'
     }).catch((err) => console.error(err));
   };
@@ -63,7 +66,7 @@ const PublicBio = () => {
                 fontSize: '15px',
                 display: 'flex',
                 alignItems: 'center',
-                justify: 'center',
+                justifyContent: 'center',
                 gap: '8px',
                 boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
               }}
