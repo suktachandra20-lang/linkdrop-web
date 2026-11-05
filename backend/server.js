@@ -30,6 +30,16 @@ mongoose.connect(MONGO_URI, {
 app.use('/api/auth', authRoutes);
 
 
+app.get('/api/users/count', async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments();
+    res.json({ totalUsers });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Link Routes
 app.get('/api/links', authMiddleware, async (req, res) => {
   try {
     const links = await Link.find({ user: req.user.id });
@@ -38,7 +48,6 @@ app.get('/api/links', authMiddleware, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 app.post('/api/links', authMiddleware, async (req, res) => {
   try {
@@ -50,7 +59,6 @@ app.post('/api/links', authMiddleware, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 app.delete('/api/links/:id', authMiddleware, async (req, res) => {
   try {
@@ -64,7 +72,6 @@ app.delete('/api/links/:id', authMiddleware, async (req, res) => {
   }
 });
 
-
 app.get('/api/click/:id', async (req, res) => {
   try {
     const link = await Link.findByIdAndUpdate(
@@ -74,13 +81,11 @@ app.get('/api/click/:id', async (req, res) => {
     );
     if (!link) return res.status(404).send('Link not found');
     
-    
     res.redirect(link.url);
   } catch (err) {
     res.status(500).send(err.message);
   }
 });
-
 
 app.get('/api/user/:username', async (req, res) => {
   try {
