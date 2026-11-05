@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
+const API_URL = import.meta.env.VITE_API_URL || 'https://linkdrop-web.onrender.com/api';
+
 const Dashboard = () => {
   const [links, setLinks] = useState([]);
   const [title, setTitle] = useState('');
@@ -24,7 +27,7 @@ const Dashboard = () => {
 
   const fetchLinks = async (token) => {
     try {
-      const res = await fetch('https://linkdrop-web-1.onrender.com/api/links', {
+      const res = await fetch(`${API_URL}/links`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -39,7 +42,7 @@ const Dashboard = () => {
     const token = localStorage.getItem('token');
 
     try {
-      const res = await fetch('https://linkdrop-web-1.onrender.com/api/links', {
+      const res = await fetch(`${API_URL}/links`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -62,7 +65,7 @@ const Dashboard = () => {
   const handleDelete = async (id) => {
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`https://linkdrop-web-1.onrender.com/api/links/${id}`, {
+      const res = await fetch(`${API_URL}/links/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -133,7 +136,7 @@ const Dashboard = () => {
           {links.length === 0 ? (
             <p style={{ color: '#94a3b8', fontSize: '14px' }}>No links added yet.</p>
           ) : (
-            links.map((item) => (
+            <links.map((item) => (
               <div key={item._id} style={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '10px', padding: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                   <h4 style={{ margin: '0 0 4px 0', fontSize: '16px', color: '#38bdf8' }}>{item.title}</h4>
