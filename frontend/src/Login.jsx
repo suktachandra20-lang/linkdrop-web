@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
-
 const API_URL = import.meta.env.VITE_API_URL || 'https://linkdrop-web.onrender.com/api';
 
 const Login = () => {
@@ -62,3 +61,6 @@ const Login = () => {
       </div>
     </div>
   );
+};
+
+export default Login;
