@@ -25,19 +25,6 @@ const PublicBio = () => {
       });
   }, [username]);
 
-  const handleLinkClick = async (e, id, url) => {
-    e.preventDefault(); 
-    try {
-     
-      await fetch(`${API_URL}/click/${id}`);
-    } catch (err) {
-      console.error('Click tracking error:', err);
-    } finally {
-      
-      window.open(url, '_blank');
-    }
-  };
-
   if (loading) return <div style={{ minHeight: '100vh', backgroundColor: '#0f172a', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading profile...</div>;
   if (error) return <div style={{ minHeight: '100vh', backgroundColor: '#0f172a', color: '#f87171', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>User Not Found!</div>;
 
@@ -57,8 +44,9 @@ const PublicBio = () => {
           {data.links.map((link) => (
             <a
               key={link._id}
-              href={link.url}
-              onClick={(e) => handleLinkClick(e, link._id, link.url)}
+              href={`${API_URL}/click/${link._id}`}
+              target="_blank"
+              rel="noreferrer"
               style={{
                 backgroundColor: '#1e293b',
                 border: '1px solid #334155',
