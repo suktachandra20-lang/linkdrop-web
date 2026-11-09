@@ -1,14 +1,19 @@
+const express = require('express');
+const router = express.Router();
 const useragent = require('express-useragent');
 const geoip = require('geoip-lite');
 const { Link, Analytics } = require('./Link'); 
+const auth = require('../middleware/auth'); 
 
 
-router.post('/create', async (req, res) => {
+router.post('/', auth, async (req, res) => {
     try {
-        const { title, url, slug, userId } = req.body;
+        const { title, url, slug } = req.body;
         
-        if (slug) {
-            const existingSlug = await Link.findOne({ slug });
+        const userId = req.user ? req.user.id : req.body.userId;
+
+        if (slug && slug.trim() !== '') {
+            const existingSlug = await Link.findOne({ slug: slug.trim() });
             if (existingSlug) {
                 return res.status(400).json({ error: 'This custom URL is already taken.' });
             }
@@ -17,14 +22,15 @@ router.post('/create', async (req, res) => {
         const newLink = new Link({
             title,
             url,
-            slug: slug || undefined, 
+            slug: slug && slug.trim() !== '' ? slug.trim() : undefined,
             user: userId
         });
 
         await newLink.save();
-        res.status(201).json({ message: 'Link created successfully!', newLink });
+        return res.status(201).json(newLink);
     } catch (err) {
-        res.status(500).json({ error: 'Server error' });
+        console.error('Create link error:', err);
+        return res.status(500).json({ error: 'Server error: ' + err.message });
     }
 });
 
@@ -47,12 +53,16 @@ router.get('/click/:identifier', async (req, res) => {
             return res.status(404).json({ error: 'Link not found' });
         }
 
-        // ট্র্যাকিং লজিক
+        
         try {
             const source = req.headers['user-agent'];
             const ua = useragent.parse(source);
             
-            const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+            let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+            if (ip && ip.includes(',')) {
+                ip = ip.split(',')[0].trim();
+            }
+            
             const geo = geoip.lookup(ip);
 
             await Analytics.create({
@@ -70,7 +80,7 @@ router.get('/click/:identifier', async (req, res) => {
 
         return res.redirect(link.url);
     } catch (err) {
-        res.status(500).json({ error: 'Server error' });
+        return res.status(500).json({ error: 'Server error' });
     }
 });
 
@@ -80,8 +90,10 @@ router.get('/analytics/:linkId', async (req, res) => {
         const { linkId } = req.params;
         
         const analyticsData = await Analytics.find({ linkId }).sort({ createdAt: -1 });
-        res.status(200).json(analyticsData);
+        return res.status(200).json(analyticsData);
     } catch (err) {
-        res.status(500).json({ error: 'Server error' });
+        return res.status(500).json({ error: 'Server error' });
     }
 });
+
+module.exports = router;
