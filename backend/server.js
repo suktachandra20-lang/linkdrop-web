@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
-const { Link } = require('./Link');
+const { Link, Analytics } = require('./Link'); // ✅ এখানে Analytics সহ ডিস্ট্রাকচার করা হয়েছে
 const User = require('./User');
 const authRoutes = require('./auth');
 const authMiddleware = require('./authMiddleware');
@@ -48,11 +48,9 @@ app.get('/api/links', authMiddleware, async (req, res) => {
   }
 });
 
-
 app.post('/api/links', authMiddleware, async (req, res) => {
   try {
     const { title, url, slug } = req.body;
-
     
     if (slug) {
       const existingSlug = await Link.findOne({ slug: slug.trim() });
@@ -87,7 +85,6 @@ app.delete('/api/links/:id', authMiddleware, async (req, res) => {
   }
 });
 
-
 app.get('/api/click/:identifier', async (req, res) => {
   try {
     const { identifier } = req.params;
@@ -115,6 +112,17 @@ app.get('/api/user/:username', async (req, res) => {
 
     const links = await Link.find({ user: user._id });
     res.json({ user, links });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Analytics Route
+app.get('/api/analytics/:linkId', authMiddleware, async (req, res) => {
+  try {
+    const { linkId } = req.params;
+    const analyticsData = await Analytics.find({ linkId }).sort({ createdAt: -1 });
+    res.json(analyticsData);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
