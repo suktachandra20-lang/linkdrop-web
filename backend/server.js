@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
-const Link = require('./Link');
+const { Link } = require('./Link');
 const User = require('./User');
 const authRoutes = require('./auth');
 const authMiddleware = require('./authMiddleware');
