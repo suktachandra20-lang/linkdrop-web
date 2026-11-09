@@ -48,10 +48,26 @@ app.get('/api/links', authMiddleware, async (req, res) => {
   }
 });
 
+
 app.post('/api/links', authMiddleware, async (req, res) => {
   try {
-    const { title, url } = req.body;
-    const newLink = new Link({ title, url, user: req.user.id });
+    const { title, url, slug } = req.body;
+
+    
+    if (slug) {
+      const existingSlug = await Link.findOne({ slug: slug.trim() });
+      if (existingSlug) {
+        return res.status(400).json({ error: 'This custom URL is already taken. Please try another.' });
+      }
+    }
+
+    const newLink = new Link({
+      title,
+      url,
+      slug: slug ? slug.trim() : undefined,
+      user: req.user.id
+    });
+
     await newLink.save();
     res.json(newLink);
   } catch (err) {
@@ -71,10 +87,16 @@ app.delete('/api/links/:id', authMiddleware, async (req, res) => {
   }
 });
 
-app.get('/api/click/:id', async (req, res) => {
+
+app.get('/api/click/:identifier', async (req, res) => {
   try {
-    const link = await Link.findByIdAndUpdate(
-      req.params.id,
+    const { identifier } = req.params;
+
+    const isObjectId = identifier.match(/^[0-9a-fA-F]{24}$/);
+    const query = isObjectId ? { _id: identifier } : { slug: identifier };
+
+    const link = await Link.findOneAndUpdate(
+      query,
       { $inc: { clicks: 1 } },
       { new: true }
     );
@@ -99,7 +121,6 @@ app.get('/api/user/:username', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-
 
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
