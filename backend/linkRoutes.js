@@ -28,6 +28,7 @@ router.post('/create', async (req, res) => {
     }
 });
 
+
 router.get('/click/:identifier', async (req, res) => {
     try {
         const { identifier } = req.params;
@@ -46,7 +47,7 @@ router.get('/click/:identifier', async (req, res) => {
             return res.status(404).json({ error: 'Link not found' });
         }
 
-       
+        // ট্র্যাকিং লজিক
         try {
             const source = req.headers['user-agent'];
             const ua = useragent.parse(source);
@@ -65,11 +66,21 @@ router.get('/click/:identifier', async (req, res) => {
             });
         } catch (trackingErr) {
             console.error('Analytics tracking error:', trackingErr);
-            
         }
-        // ----------------------------------------
 
         return res.redirect(link.url);
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+
+router.get('/analytics/:linkId', async (req, res) => {
+    try {
+        const { linkId } = req.params;
+        
+        const analyticsData = await Analytics.find({ linkId }).sort({ createdAt: -1 });
+        res.status(200).json(analyticsData);
     } catch (err) {
         res.status(500).json({ error: 'Server error' });
     }
