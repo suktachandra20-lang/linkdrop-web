@@ -7,11 +7,11 @@ const Dashboard = () => {
   const [links, setLinks] = useState([]);
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
-  const [slug, setSlug] = useState(''); // কাস্টম স্ল্যাগ স্টেট
+  const [slug, setSlug] = useState(''); 
   const [user, setUser] = useState(null);
   const [copied, setCopied] = useState(false);
   
-  // অ্যানালিটিক্স মোডাল স্টেট
+  
   const [analyticsData, setAnalyticsData] = useState([]);
   const [selectedLinkTitle, setSelectedLinkTitle] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -87,20 +87,24 @@ const Dashboard = () => {
     }
   };
 
-  // অ্যানালিটিক্স ডাটা ফেচ করার ফাংশন
+  
   const fetchAnalytics = async (linkId, linkTitle) => {
     try {
-      const res = await fetch(`${API_URL}/analytics/${linkId}`);
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_URL}/analytics/${linkId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       const data = await res.json();
       if (res.ok) {
         setAnalyticsData(data);
         setSelectedLinkTitle(linkTitle);
         setShowModal(true);
       } else {
-        alert('Could not load analytics.');
+        alert(data.error || 'Could not load analytics.');
       }
     } catch (err) {
       console.error(err);
+      alert('Could not load analytics.');
     }
   };
 
