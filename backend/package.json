@@ -16,6 +16,8 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "express-useragent": "^2.2.3",
+    "geoip-lite": "^2.0.3",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.7.1",
     "nodemon": "^3.1.14"

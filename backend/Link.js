@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const linkSchema = new mongoose.Schema({
   title: { type: String, required: true },
   url: { type: String, required: true },
@@ -8,4 +9,19 @@ const linkSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Link', linkSchema);
+const Link = mongoose.model('Link', linkSchema);
+
+
+const analyticsSchema = new mongoose.Schema({
+  linkId: { type: mongoose.Schema.Types.ObjectId, ref: 'Link', required: true },
+  device: { type: String, default: 'Unknown' },
+  browser: { type: String, default: 'Unknown' },
+  os: { type: String, default: 'Unknown' },
+  country: { type: String, default: 'Unknown' },
+  city: { type: String, default: 'Unknown' },
+  ip: { type: String },
+}, { timestamps: true });
+
+const Analytics = mongoose.model('Analytics', analyticsSchema);
+
+module.exports = { Link, Analytics };
