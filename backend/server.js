@@ -102,11 +102,26 @@ app.get('/api/click/:identifier', async (req, res) => {
       { new: true }
     );
     if (!link) return res.status(404).send('Link not found');
-
     
     try {
-      const source = req.headers['user-agent'];
-      const ua = useragent.parse(source);
+      const uaString = req.headers['user-agent'] || '';
+      
+      let browser = 'Unknown';
+      if (uaString.includes('Chrome')) browser = 'Chrome';
+      else if (uaString.includes('Firefox')) browser = 'Firefox';
+      else if (uaString.includes('Safari')) browser = 'Safari';
+      else if (uaString.includes('Edge')) browser = 'Edge';
+
+      let os = 'Unknown';
+      if (uaString.includes('Windows')) os = 'Windows';
+      else if (uaString.includes('Mac')) os = 'MacOS';
+      else if (uaString.includes('Linux')) os = 'Linux';
+      else if (uaString.includes('Android')) os = 'Android';
+      else if (uaString.includes('iPhone') || uaString.includes('iPad')) os = 'iOS';
+
+      let device = 'Desktop';
+      if (/Mobi|Android/i.test(uaString)) device = 'Mobile';
+      else if (/Tablet|iPad/i.test(uaString)) device = 'Tablet';
       
       let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
       if (ip && ip.includes(',')) {
@@ -117,9 +132,9 @@ app.get('/api/click/:identifier', async (req, res) => {
 
       await Analytics.create({
         linkId: link._id,
-        device: ua.isMobile ? 'Mobile' : ua.isTablet ? 'Tablet' : 'Desktop',
-        browser: ua.browser || 'Unknown',
-        os: ua.os || 'Unknown',
+        device: device,
+        browser: browser,
+        os: os,
         country: geo ? geo.country : 'Unknown',
         city: geo ? geo.city : 'Unknown',
         ip: ip
@@ -150,7 +165,15 @@ app.get('/api/user/:username', async (req, res) => {
 app.get('/api/analytics/:linkId', authMiddleware, async (req, res) => {
   try {
     const { linkId } = req.params;
-    const analyticsData = await Analytics.find({ linkId }).sort({ createdAt: -1 });
+    
+    const queryFilter = {
+      $or: [
+        { linkId: linkId },
+        ...(linkId.match(/^[0-9a-fA-F]{24}$/) ? [{ linkId: new mongoose.Types.ObjectId(linkId) }] : [])
+      ]
+    };
+
+    const analyticsData = await Analytics.find(queryFilter).sort({ createdAt: -1 });
     res.json(analyticsData);
   } catch (err) {
     res.status(500).json({ error: err.message });
