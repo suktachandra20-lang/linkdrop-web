@@ -8,7 +8,6 @@ const Dashboard = () => {
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
   const [slug, setSlug] = useState(''); 
-  const [user, setUser] = useState(null);
   const [copied, setCopied] = useState(false);
   
   

@@ -4,9 +4,11 @@ dns.setDefaultResultOrder('ipv4first');
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const useragent = require('express-useragent'); 
+const geoip = require('geoip-lite'); 
 require('dotenv').config();
 
-const { Link, Analytics } = require('./Link'); // ✅ এখানে Analytics সহ ডিস্ট্রাকচার করা হয়েছে
+const { Link, Analytics } = require('./Link');
 const User = require('./User');
 const authRoutes = require('./auth');
 const authMiddleware = require('./authMiddleware');
@@ -15,6 +17,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use(useragent.express()); 
 
 // MongoDB Connection
 const MONGO_URI = process.env.MONGO_URI;
@@ -85,6 +88,7 @@ app.delete('/api/links/:id', authMiddleware, async (req, res) => {
   }
 });
 
+
 app.get('/api/click/:identifier', async (req, res) => {
   try {
     const { identifier } = req.params;
@@ -98,6 +102,31 @@ app.get('/api/click/:identifier', async (req, res) => {
       { new: true }
     );
     if (!link) return res.status(404).send('Link not found');
+
+    
+    try {
+      const source = req.headers['user-agent'];
+      const ua = useragent.parse(source);
+      
+      let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+      if (ip && ip.includes(',')) {
+        ip = ip.split(',')[0].trim();
+      }
+      
+      const geo = geoip.lookup(ip);
+
+      await Analytics.create({
+        linkId: link._id,
+        device: ua.isMobile ? 'Mobile' : ua.isTablet ? 'Tablet' : 'Desktop',
+        browser: ua.browser || 'Unknown',
+        os: ua.os || 'Unknown',
+        country: geo ? geo.country : 'Unknown',
+        city: geo ? geo.city : 'Unknown',
+        ip: ip
+      });
+    } catch (trackingErr) {
+      console.error('Analytics tracking error:', trackingErr);
+    }
     
     res.redirect(link.url);
   } catch (err) {
