@@ -85,10 +85,11 @@ const Dashboard = () => {
       
       {/* Top Header */}
       <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 40px', borderBottom: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(3,7,18,0.85)', backdropFilter: 'blur(10px)' }}>
-        <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          ⚡ LinkDrop
+        <div style={{ fontSize: '26px', fontWeight: '800', color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '12px', letterSpacing: '-0.5px' }}>
+          <img src="https://img.icons8.com/color/48/chain.png" alt="logo" style={{ width: '32px', height: '32px' }} />
+          LinkDrop
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
           <span style={{ fontSize: '14px', color: '#9ca3af' }}>Welcome, <strong style={{ color: '#fff' }}>{username}</strong> 👋</span>
           <button onClick={() => { localStorage.removeItem('token'); navigate('/login'); }} style={{ backgroundColor: '#ef4444', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}>
             Logout
@@ -151,28 +152,32 @@ const Dashboard = () => {
           {/* Saved Links List */}
           <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '20px' }}>Your Saved Links</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {links.map((link) => (
-              <div key={link._id} style={{ backgroundColor: 'rgba(15, 23, 42, 0.85)', border: '1px solid rgba(255,255,255,0.08)', padding: '20px', borderRadius: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backdropFilter: 'blur(8px)' }}>
-                <div>
-                  <h4 style={{ fontSize: '16px', fontWeight: '600', color: '#38bdf8', marginBottom: '4px' }}>{link.title}</h4>
-                  <a href={link.url} target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', fontSize: '13px', textDecoration: 'none', display: 'block', marginBottom: '8px' }}>{link.url}</a>
-                  <span style={{ backgroundColor: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8', padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: '600' }}>
-                    🔥 {link.clicks || 0} Clicks
-                  </span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <div style={{ width: '45px', height: '45px', backgroundColor: '#fff', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', color: '#000', fontWeight: 'bold' }}>
-                    QR
+            {links.length === 0 ? (
+              <p style={{ color: '#9ca3af', fontSize: '14px' }}>No links added yet. Create your first link above!</p>
+            ) : (
+              links.map((link) => (
+                <div key={link._id} style={{ backgroundColor: 'rgba(15, 23, 42, 0.85)', border: '1px solid rgba(255,255,255,0.08)', padding: '20px', borderRadius: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backdropFilter: 'blur(8px)' }}>
+                  <div>
+                    <h4 style={{ fontSize: '16px', fontWeight: '600', color: '#38bdf8', marginBottom: '4px' }}>{link.title}</h4>
+                    <a href={link.url} target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', fontSize: '13px', textDecoration: 'none', display: 'block', marginBottom: '8px' }}>{link.url}</a>
+                    <span style={{ backgroundColor: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8', padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: '600' }}>
+                      🔥 {link.clicks || 0} Clicks
+                    </span>
                   </div>
-                  <button onClick={() => navigate(`/analytics/${link._id}`)} style={{ backgroundColor: '#334155', color: '#fff', border: 'none', padding: '8px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px' }}>
-                    Analytics
-                  </button>
-                  <button onClick={() => handleDelete(link._id)} style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '8px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px' }}>
-                    Delete
-                  </button>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ width: '45px', height: '45px', backgroundColor: '#fff', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', color: '#000', fontWeight: 'bold' }}>
+                      QR
+                    </div>
+                    <button onClick={() => navigate(`/analytics/${link._id}`)} style={{ backgroundColor: '#334155', color: '#fff', border: 'none', padding: '8px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px' }}>
+                      Analytics
+                    </button>
+                    <button onClick={() => handleDelete(link._id)} style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '8px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px' }}>
+                      Delete
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
 
