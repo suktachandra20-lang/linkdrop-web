@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const [links, setLinks] = useState([]);
@@ -17,7 +17,6 @@ const Dashboard = () => {
       return;
     }
 
-    // Fetch user links
     fetch('https://linkdrop-web.onrender.com/api/links', {
       headers: { 'x-auth-token': token }
     })
@@ -86,12 +85,12 @@ const Dashboard = () => {
         </div>
       </nav>
 
-      {/* Main Container with Sidebar Layout */}
-      <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 20px', display: 'grid', gridTemplateColumns: '1fr 300px', gap: '30px' }}>
+      {/* Main Grid Layout */}
+      <div style={{ maxWidth: '1280px', margin: '40px auto', padding: '0 20px', display: 'grid', gridTemplateColumns: '1fr 340px', gap: '30px' }}>
         
         {/* Left Main Content */}
         <div>
-          {/* Stats Overview Cards */}
+          {/* Stats & Device Traffic Overview */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '35px' }}>
             <div style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', padding: '24px', borderRadius: '16px' }}>
               <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '8px', textTransform: 'uppercase' }}>Total Active Links</p>
@@ -100,6 +99,16 @@ const Dashboard = () => {
             <div style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', padding: '24px', borderRadius: '16px' }}>
               <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '8px', textTransform: 'uppercase' }}>Global Lifetime Clicks</p>
               <h2 style={{ fontSize: '32px', fontWeight: '800', color: '#4ade80' }}>{totalClicks}</h2>
+            </div>
+            <div style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', padding: '24px', borderRadius: '16px' }}>
+              <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '8px', textTransform: 'uppercase' }}>Global Traffic by Device</p>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '10px', fontSize: '12px', color: '#9ca3af' }}>
+                <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: 'conic-gradient(#38bdf8 0% 55%, #4ade80 55% 75%, #f43f5e 75% 100%)' }}></div>
+                <div>
+                  <p style={{ color: '#38bdf8' }}>● Desktop 55%</p>
+                  <p style={{ color: '#4ade80' }}>● Mobile 20%</p>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -128,7 +137,7 @@ const Dashboard = () => {
             </form>
           </div>
 
-          {/* Saved Links List */}
+          {/* Saved Links List with QR Code preview */}
           <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '20px' }}>Your Saved Links</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {links.map((link) => (
@@ -140,7 +149,11 @@ const Dashboard = () => {
                     🔥 {link.clicks || 0} Clicks
                   </span>
                 </div>
-                <div style={{ display: 'flex', gap: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  {/* Mock QR Code Box */}
+                  <div style={{ width: '45px', height: '45px', backgroundColor: '#fff', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', color: '#000', fontWeight: 'bold' }}>
+                    QR
+                  </div>
                   <button onClick={() => navigate(`/analytics/${link._id}`)} style={{ backgroundColor: '#334155', color: '#fff', border: 'none', padding: '8px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px' }}>
                     Analytics
                   </button>
@@ -153,14 +166,23 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Right Sidebar (Quick Actions / Widgets) */}
+        {/* Right Sidebar - Expanded & Big Quick Actions */}
         <div>
-          <div style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', padding: '24px', borderRadius: '16px', position: 'sticky', top: '20px' }}>
-            <h4 style={{ fontSize: '15px', fontWeight: '700', marginBottom: '16px', color: '#f3f4f6' }}>Quick Actions</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '14px', color: '#9ca3af' }}>
-              <div style={{ padding: '10px', backgroundColor: '#030712', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>🎨 Design Customization</div>
-              <div style={{ padding: '10px', backgroundColor: '#030712', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>🌐 Domain Management</div>
-              <div style={{ padding: '10px', backgroundColor: '#030712', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>📈 Traffic Insights</div>
+          <div style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', padding: '28px', borderRadius: '16px', position: 'sticky', top: '20px' }}>
+            <h4 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '20px', color: '#f3f4f6', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '12px' }}>⚡ Quick Actions</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', fontSize: '15px' }}>
+              <div style={{ padding: '16px', backgroundColor: '#030712', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer', fontWeight: '600', color: '#38bdf8' }}>
+                🎨 Design Customization
+              </div>
+              <div style={{ padding: '16px', backgroundColor: '#030712', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer', fontWeight: '600', color: '#4ade80' }}>
+                🌐 Domain Management
+              </div>
+              <div style={{ padding: '16px', backgroundColor: '#030712', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer', fontWeight: '600', color: '#f43f5e' }}>
+                📊 Traffic Insights
+              </div>
+              <div style={{ padding: '16px', backgroundColor: '#030712', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer', fontWeight: '600', color: '#c084fc' }}>
+                ⚙️ Link Expiry Settings
+              </div>
             </div>
           </div>
         </div>
