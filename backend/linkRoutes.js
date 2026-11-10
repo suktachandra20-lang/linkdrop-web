@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const useragent = require('express-useragent');
 const geoip = require('geoip-lite');
 const { Link, Analytics } = require('./Link'); 
 const auth = require('../middleware/auth'); 
@@ -53,8 +52,25 @@ router.get('/click/:identifier', async (req, res) => {
         }
         
         try {
-            const source = req.headers['user-agent'];
-            const ua = useragent.parse(source);
+            const uaString = req.headers['user-agent'] || '';
+            
+            // Safe parser for Browser, OS & Device
+            let browser = 'Unknown';
+            if (uaString.includes('Chrome')) browser = 'Chrome';
+            else if (uaString.includes('Firefox')) browser = 'Firefox';
+            else if (uaString.includes('Safari')) browser = 'Safari';
+            else if (uaString.includes('Edge')) browser = 'Edge';
+
+            let os = 'Unknown';
+            if (uaString.includes('Windows')) os = 'Windows';
+            else if (uaString.includes('Mac')) os = 'MacOS';
+            else if (uaString.includes('Linux')) os = 'Linux';
+            else if (uaString.includes('Android')) os = 'Android';
+            else if (uaString.includes('iPhone') || uaString.includes('iPad')) os = 'iOS';
+
+            let device = 'Desktop';
+            if (/Mobi|Android/i.test(uaString)) device = 'Mobile';
+            else if (/Tablet|iPad/i.test(uaString)) device = 'Tablet';
             
             let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
             if (ip && ip.includes(',')) {
@@ -65,9 +81,9 @@ router.get('/click/:identifier', async (req, res) => {
 
             await Analytics.create({
                 linkId: link._id,
-                device: ua.isMobile ? 'Mobile' : ua.isTablet ? 'Tablet' : 'Desktop',
-                browser: ua.browser || 'Unknown',
-                os: ua.os || 'Unknown',
+                device: device,
+                browser: browser,
+                os: os,
                 country: geo ? geo.country : 'Unknown',
                 city: geo ? geo.city : 'Unknown',
                 ip: ip
@@ -86,7 +102,6 @@ router.get('/click/:identifier', async (req, res) => {
 router.get('/analytics/:linkId', async (req, res) => {
     try {
         const { linkId } = req.params;
-        
         
         const queryFilter = {
             $or: [
