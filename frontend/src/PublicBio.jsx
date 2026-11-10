@@ -1,4 +1,4 @@
- import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://linkdrop-web.onrender.com/api';
@@ -44,7 +44,7 @@ const PublicBio = () => {
           {data.links.map((link) => (
             <a
               key={link._id}
-              href={`${API_URL}/click/${link._id}`}
+              href={`${API_URL}/click/${link.slug || link._id}`}
               target="_blank"
               rel="noreferrer"
               style={{
