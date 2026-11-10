@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const useragent = require('express-useragent');
 const geoip = require('geoip-lite');
 const { Link, Analytics } = require('./Link'); 
 const auth = require('../middleware/auth'); 
-
 
 router.post('/', auth, async (req, res) => {
     try {
@@ -34,7 +34,6 @@ router.post('/', auth, async (req, res) => {
     }
 });
 
-
 router.get('/click/:identifier', async (req, res) => {
     try {
         const { identifier } = req.params;
@@ -52,7 +51,6 @@ router.get('/click/:identifier', async (req, res) => {
         if (!link) {
             return res.status(404).json({ error: 'Link not found' });
         }
-
         
         try {
             const source = req.headers['user-agent'];
@@ -80,18 +78,27 @@ router.get('/click/:identifier', async (req, res) => {
 
         return res.redirect(link.url);
     } catch (err) {
+        console.error('Click redirect error:', err);
         return res.status(500).json({ error: 'Server error' });
     }
 });
-
 
 router.get('/analytics/:linkId', async (req, res) => {
     try {
         const { linkId } = req.params;
         
-        const analyticsData = await Analytics.find({ linkId }).sort({ createdAt: -1 });
+        
+        const queryFilter = {
+            $or: [
+                { linkId: linkId },
+                ...(linkId.match(/^[0-9a-fA-F]{24}$/) ? [{ linkId: new mongoose.Types.ObjectId(linkId) }] : [])
+            ]
+        };
+
+        const analyticsData = await Analytics.find(queryFilter).sort({ createdAt: -1 });
         return res.status(200).json(analyticsData);
     } catch (err) {
+        console.error('Fetch analytics error:', err);
         return res.status(500).json({ error: 'Server error' });
     }
 });
