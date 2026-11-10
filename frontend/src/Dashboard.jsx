@@ -70,10 +70,21 @@ const Dashboard = () => {
   const totalClicks = links.reduce((sum, link) => sum + (link.clicks || 0), 0);
 
   return (
-    <div style={{ backgroundColor: '#030712', color: '#f9fafb', minHeight: '100vh', fontFamily: 'system-ui, sans-serif', paddingBottom: '60px' }}>
+    <div style={{ 
+      backgroundColor: '#030712', 
+      backgroundImage: `radial-gradient(circle at 20% 30%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(129, 140, 248, 0.08) 0%, transparent 40%),
+                        linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px)`,
+      backgroundSize: '100% 100%, 100% 100%, 40px 40px, 40px 40px',
+      color: '#f9fafb', 
+      minHeight: '100vh', 
+      fontFamily: 'system-ui, sans-serif', 
+      paddingBottom: '60px' 
+    }}>
       
       {/* Top Header */}
-      <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 40px', borderBottom: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(3,7,18,0.9)', backdropFilter: 'blur(10px)' }}>
+      <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 40px', borderBottom: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(3,7,18,0.85)', backdropFilter: 'blur(10px)' }}>
         <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '8px' }}>
           ⚡ LinkDrop
         </div>
@@ -92,15 +103,15 @@ const Dashboard = () => {
         <div>
           {/* Stats & Device Traffic Overview */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '35px' }}>
-            <div style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', padding: '24px', borderRadius: '16px' }}>
+            <div style={{ backgroundColor: 'rgba(15, 23, 42, 0.85)', border: '1px solid rgba(255,255,255,0.08)', padding: '24px', borderRadius: '16px', backdropFilter: 'blur(8px)' }}>
               <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '8px', textTransform: 'uppercase' }}>Total Active Links</p>
               <h2 style={{ fontSize: '32px', fontWeight: '800', color: '#38bdf8' }}>{links.length}</h2>
             </div>
-            <div style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', padding: '24px', borderRadius: '16px' }}>
+            <div style={{ backgroundColor: 'rgba(15, 23, 42, 0.85)', border: '1px solid rgba(255,255,255,0.08)', padding: '24px', borderRadius: '16px', backdropFilter: 'blur(8px)' }}>
               <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '8px', textTransform: 'uppercase' }}>Global Lifetime Clicks</p>
               <h2 style={{ fontSize: '32px', fontWeight: '800', color: '#4ade80' }}>{totalClicks}</h2>
             </div>
-            <div style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', padding: '24px', borderRadius: '16px' }}>
+            <div style={{ backgroundColor: 'rgba(15, 23, 42, 0.85)', border: '1px solid rgba(255,255,255,0.08)', padding: '24px', borderRadius: '16px', backdropFilter: 'blur(8px)' }}>
               <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '8px', textTransform: 'uppercase' }}>Global Traffic by Device</p>
               <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '10px', fontSize: '12px', color: '#9ca3af' }}>
                 <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: 'conic-gradient(#38bdf8 0% 55%, #4ade80 55% 75%, #f43f5e 75% 100%)' }}></div>
@@ -113,7 +124,7 @@ const Dashboard = () => {
           </div>
 
           {/* Public Bio Link Box */}
-          <div style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', padding: '20px 24px', borderRadius: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '35px' }}>
+          <div style={{ backgroundColor: 'rgba(15, 23, 42, 0.85)', border: '1px solid rgba(255,255,255,0.08)', padding: '20px 24px', borderRadius: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '35px', backdropFilter: 'blur(8px)' }}>
             <div>
               <p style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '4px' }}>Your Public Bio Link:</p>
               <code style={{ color: '#38bdf8', fontSize: '14px' }}>https://linkdrop-web.vercel.app/u/{username}</code>
@@ -124,7 +135,7 @@ const Dashboard = () => {
           </div>
 
           {/* Add New Link Form */}
-          <div style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', padding: '28px', borderRadius: '16px', marginBottom: '35px' }}>
+          <div style={{ backgroundColor: 'rgba(15, 23, 42, 0.85)', border: '1px solid rgba(255,255,255,0.08)', padding: '28px', borderRadius: '16px', marginBottom: '35px', backdropFilter: 'blur(8px)' }}>
             <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '20px' }}>Add New Link</h3>
             {error && <p style={{ color: '#ef4444', marginBottom: '15px', fontSize: '14px' }}>{error}</p>}
             <form onSubmit={handleAddLink} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -137,11 +148,11 @@ const Dashboard = () => {
             </form>
           </div>
 
-          {/* Saved Links List with QR Code preview */}
+          {/* Saved Links List */}
           <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '20px' }}>Your Saved Links</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {links.map((link) => (
-              <div key={link._id} style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', padding: '20px', borderRadius: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div key={link._id} style={{ backgroundColor: 'rgba(15, 23, 42, 0.85)', border: '1px solid rgba(255,255,255,0.08)', padding: '20px', borderRadius: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backdropFilter: 'blur(8px)' }}>
                 <div>
                   <h4 style={{ fontSize: '16px', fontWeight: '600', color: '#38bdf8', marginBottom: '4px' }}>{link.title}</h4>
                   <a href={link.url} target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', fontSize: '13px', textDecoration: 'none', display: 'block', marginBottom: '8px' }}>{link.url}</a>
@@ -150,7 +161,6 @@ const Dashboard = () => {
                   </span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  {/* Mock QR Code Box */}
                   <div style={{ width: '45px', height: '45px', backgroundColor: '#fff', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', color: '#000', fontWeight: 'bold' }}>
                     QR
                   </div>
@@ -166,9 +176,9 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Right Sidebar - Expanded & Big Quick Actions */}
+        {/* Right Sidebar - Quick Actions */}
         <div>
-          <div style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', padding: '28px', borderRadius: '16px', position: 'sticky', top: '20px' }}>
+          <div style={{ backgroundColor: 'rgba(15, 23, 42, 0.85)', border: '1px solid rgba(255,255,255,0.08)', padding: '28px', borderRadius: '16px', position: 'sticky', top: '20px', backdropFilter: 'blur(8px)' }}>
             <h4 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '20px', color: '#f3f4f6', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '12px' }}>⚡ Quick Actions</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', fontSize: '15px' }}>
               <div style={{ padding: '16px', backgroundColor: '#030712', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer', fontWeight: '600', color: '#38bdf8' }}>
