@@ -12,7 +12,12 @@ const Landing = () => {
         </div>
         <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
           <a href="#features" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '14px', fontWeight: '500', transition: 'color 0.2s' }}>Features</a>
-          <a href="#analytics" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>Analytics</a>
+          
+          {/* Analytics Link -> Directs to Dashboard */}
+          <Link to="/dashboard" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>
+            Analytics
+          </Link>
+
           <Link to="/login" style={{ color: '#f3f4f6', textDecoration: 'none', fontSize: '14px', fontWeight: '500', padding: '8px 16px' }}>Login</Link>
           <Link to="/register" style={{ background: 'linear-gradient(135deg, #0284c7 0%, #4f46e5 100%)', color: '#fff', padding: '10px 20px', borderRadius: '10px', textDecoration: 'none', fontSize: '14px', fontWeight: '600', boxShadow: '0 4px 14px rgba(79, 70, 229, 0.4)' }}>
             Get Started Free
