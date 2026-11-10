@@ -3,123 +3,104 @@ import { Link } from 'react-router-dom';
 
 const Landing = () => {
   return (
-    <div style={{ backgroundColor: '#0f172a', color: '#f8fafc', minHeight: '100vh', fontFamily: 'system-ui, -apple-system, sans-serif', overflowX: 'hidden' }}>
+    <div style={{ backgroundColor: '#030712', color: '#f9fafb', minHeight: '100vh', fontFamily: 'system-ui, -apple-system, sans-serif', overflowX: 'hidden' }}>
       
-      {/* Top Navigation Bar */}
-      <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 40px', borderBottom: '1px solid #1e293b', position: 'sticky', top: 0, backgroundColor: 'rgba(15, 23, 42, 0.9)', backdropFilter: 'blur(10px)', zIndex: 1000 }}>
-        <div style={{ fontSize: '20px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px', color: '#38bdf8' }}>
-          🔗 LinkDrop
+      {/* Top Navigation */}
+      <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 48px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', position: 'sticky', top: 0, backdropFilter: 'blur(12px)', backgroundColor: 'rgba(3, 7, 18, 0.8)', zIndex: 1000 }}>
+        <div style={{ fontSize: '22px', fontWeight: '800', background: 'linear-gradient(135deg, #38bdf8 0%, #818cf8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          ⚡ LinkDrop
         </div>
-        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-          <a href="#features" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>Features</a>
-          <a href="#analytics" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>Analytics</a>
-          <Link to="/login" style={{ backgroundColor: '#1e293b', border: '1px solid #334155', color: '#fff', padding: '8px 16px', borderRadius: '8px', textDecoration: 'none', fontSize: '14px' }}>Login</Link>
-          <Link to="/register" style={{ backgroundColor: '#2563eb', color: '#fff', padding: '8px 16px', borderRadius: '8px', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>Get Started</Link>
+        <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+          <a href="#features" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '14px', fontWeight: '500', transition: 'color 0.2s' }}>Features</a>
+          <a href="#analytics" style={{ color: '#9ca3af', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>Analytics</a>
+          <Link to="/login" style={{ color: '#f3f4f6', textDecoration: 'none', fontSize: '14px', fontWeight: '500', padding: '8px 16px' }}>Login</Link>
+          <Link to="/register" style={{ background: 'linear-gradient(135deg, #0284c7 0%, #4f46e5 100%)', color: '#fff', padding: '10px 20px', borderRadius: '10px', textDecoration: 'none', fontSize: '14px', fontWeight: '600', boxShadow: '0 4px 14px rgba(79, 70, 229, 0.4)' }}>
+            Get Started Free
+          </Link>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section style={{ textAlign: 'center', padding: '100px 20px 80px 20px', maxWidth: '900px', margin: '0 auto' }}>
-        <div style={{ display: 'inline-block', backgroundColor: '#1e293b', color: '#38bdf8', padding: '6px 16px', borderRadius: '20px', fontSize: '13px', fontWeight: '600', marginBottom: '20px', border: '1px solid #334155' }}>
-          ✨ Ultimate Bio Link & Click Analytics Platform
+      <section style={{ textAlign: 'center', padding: '120px 20px 90px 20px', maxWidth: '960px', margin: '0 auto' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8', padding: '6px 16px', borderRadius: '30px', fontSize: '13px', fontWeight: '600', marginBottom: '24px', border: '1px solid rgba(56, 189, 248, 0.2)' }}>
+          🚀 Next-Gen Bio Links & Real-Time Intelligence
         </div>
-        <h1 style={{ fontSize: '52px', fontWeight: '800', marginBottom: '20px', lineHeight: '1.2', letterSpacing: '-1px' }}>
-          The Ultimate Link & <span style={{ color: '#38bdf8' }}>Media Hub</span>
+        
+        <h1 style={{ fontSize: '58px', fontWeight: '900', marginBottom: '24px', lineHeight: '1.15', letterSpacing: '-1.5px' }}>
+          One Link for Everything. <br />
+          <span style={{ background: 'linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            Track Every Single Click.
+          </span>
         </h1>
-        <p style={{ color: '#94a3b8', fontSize: '18px', marginBottom: '40px', lineHeight: '1.6', maxWidth: '700px', margin: '0 auto 40px auto' }}>
-          A handpicked collection of your links, social profiles, and media — organized and updated in real-time. Share your public bio and track precise visitor device and location insights.
+        
+        <p style={{ color: '#9ca3af', fontSize: '19px', marginBottom: '45px', lineHeight: '1.6', maxWidth: '720px', margin: '0 auto 45px auto' }}>
+          Empower your online presence with a stunning public bio page and deep visitor telemetry—covering precise device type, browser, OS, and location analytics.
         </p>
         
         <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
-          <Link to="/register" style={{ backgroundColor: '#2563eb', color: '#fff', padding: '14px 28px', borderRadius: '12px', textDecoration: 'none', fontWeight: 'bold', fontSize: '16px', boxShadow: '0 10px 25px -5px rgba(37, 99, 235, 0.4)' }}>
-            Explore the Collection →
+          <Link to="/register" style={{ background: 'linear-gradient(135deg, #0284c7 0%, #4f46e5 100%)', color: '#fff', padding: '16px 32px', borderRadius: '14px', textDecoration: 'none', fontWeight: 'bold', fontSize: '16px', boxShadow: '0 10px 25px rgba(2, 132, 199, 0.3)' }}>
+            Create Your Hub Now →
           </Link>
         </div>
 
-        {/* Quick App/Dashboard Link Box */}
-        <div style={{ marginTop: '50px', backgroundColor: '#1e293b', border: '1px solid #334155', padding: '30px', borderRadius: '16px', maxWidth: '600px', margin: '50px auto 0 auto', textAlign: 'left' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <span style={{ fontSize: '13px', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold' }}>Quick Access</span>
-            <span style={{ fontSize: '12px', color: '#22c55e', backgroundColor: 'rgba(34, 197, 94, 0.1)', padding: '2px 8px', borderRadius: '6px' }}>● Live & Active</span>
+        {/* Floating Preview Card Box */}
+        <div style={{ marginTop: '60px', background: 'linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%)', border: '1px solid rgba(255, 255, 255, 0.1)', padding: '35px', borderRadius: '24px', maxWidth: '640px', margin: '60px auto 0 auto', textAlign: 'left', backdropFilter: 'blur(20px)', boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <span style={{ fontSize: '12px', color: '#38bdf8', textTransform: 'uppercase', letterSpacing: '1.5px', fontWeight: 'bold' }}>Live Dashboard Preview</span>
+            <span style={{ fontSize: '12px', color: '#4ade80', backgroundColor: 'rgba(74, 222, 128, 0.1)', padding: '3px 10px', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '6px' }}>● System Operational</span>
           </div>
-          <Link to="/dashboard" style={{ display: 'block', backgroundColor: '#0f172a', border: '1px solid #334155', color: '#f8fafc', padding: '14px 16px', borderRadius: '10px', textDecoration: 'none', fontWeight: '600', fontSize: '15px', marginBottom: '12px' }}>
-            🚀 Open LinkDrop Dashboard
+          <Link to="/dashboard" style={{ display: 'block', backgroundColor: '#030712', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#f3f4f6', padding: '16px 20px', borderRadius: '12px', textDecoration: 'none', fontWeight: '600', fontSize: '15px', marginBottom: '14px', transition: 'all 0.2s' }}>
+            ⚡ Access Interactive Creator Dashboard
           </Link>
-          <span style={{ fontSize: '13px', color: '#64748b' }}>Public Bio Preview: <code style={{ color: '#38bdf8' }}>linkdrop-web.vercel.app/u/yourname</code></span>
+          <div style={{ fontSize: '13px', color: '#6b7280' }}>
+            Your Public URL Endpoint: <code style={{ color: '#38bdf8', backgroundColor: 'rgba(56, 189, 248, 0.08)', padding: '2px 6px', borderRadius: '4px' }}>linkdrop-web.vercel.app/u/yourname</code>
+          </div>
         </div>
       </section>
 
-      {/* Features Section (Scroll Down) */}
-      <section id="features" style={{ padding: '90px 20px', backgroundColor: '#0b0f19', borderTop: '1px solid #1e293b' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '36px', fontWeight: 'bold', marginBottom: '12px' }}>Built for a Seamless Experience</h2>
-          <p style={{ color: '#94a3b8', marginBottom: '60px', fontSize: '16px' }}>Everything you need to manage your links and analyze traffic, on any device.</p>
+      {/* Bento Grid Features Section */}
+      <section id="features" style={{ padding: '100px 20px', backgroundColor: '#020617', borderTop: '1px solid rgba(255, 255, 255, 0.05)' }}>
+        <div style={{ maxWidth: '1140px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '38px', fontWeight: '800', marginBottom: '14px', letterSpacing: '-0.5px' }}>Engineered for High Performance</h2>
+          <p style={{ color: '#9ca3af', marginBottom: '64px', fontSize: '16px' }}>Packed with advanced modules designed to give you total control over your traffic.</p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px', textAlign: 'left' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px', textAlign: 'left' }}>
             
-            {/* Card 1 */}
-            <div style={{ backgroundColor: '#1e293b', border: '1px solid #334155', padding: '28px', borderRadius: '16px', transition: 'transform 0.2s' }}>
-              <div style={{ fontSize: '28px', marginBottom: '16px' }}>🔒</div>
-              <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '10px' }}>End-to-End Encrypted</h3>
-              <p style={{ color: '#94a3b8', fontSize: '14px', lineHeight: '1.6' }}>All account data and links are secured with robust authentication protocols. Browse with absolute confidence.</p>
+            {/* Feature 1 */}
+            <div style={{ background: 'linear-gradient(145deg, #0f172a 0%, #090d16 100%)', border: '1px solid rgba(255, 255, 255, 0.08)', padding: '32px', borderRadius: '20px' }}>
+              <div style={{ fontSize: '30px', marginBottom: '18px' }}>🛡️</div>
+              <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '10px', color: '#f3f4f6' }}>Secure MERN Architecture</h3>
+              <p style={{ color: '#9ca3af', fontSize: '14px', lineHeight: '1.6' }}>Built on robust Node.js and MongoDB infrastructure with encrypted authentication protocols.</p>
             </div>
 
-            {/* Card 2 */}
-            <div style={{ backgroundColor: '#1e293b', border: '1px solid #334155', padding: '28px', borderRadius: '16px' }}>
-              <div style={{ fontSize: '28px', marginBottom: '16px' }}>📊</div>
-              <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '10px' }}>Real-time Click Analytics</h3>
-              <p style={{ color: '#94a3b8', fontSize: '14px', lineHeight: '1.6' }}>Track visitor device, browser, operating system, and geographic location instantly upon every click.</p>
+            {/* Feature 2 */}
+            <div style={{ background: 'linear-gradient(145deg, #0f172a 0%, #090d16 100%)', border: '1px solid rgba(255, 255, 255, 0.08)', padding: '32px', borderRadius: '20px' }}>
+              <div style={{ fontSize: '30px', marginBottom: '18px' }}>📊</div>
+              <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '10px', color: '#f3f4f6' }}>Deep Telemetry Analytics</h3>
+              <p style={{ color: '#9ca3af', fontSize: '14px', lineHeight: '1.6' }}>Log every click with granular geographic lookup, device detection, and browser identification.</p>
             </div>
 
-            {/* Card 3 */}
-            <div style={{ backgroundColor: '#1e293b', border: '1px solid #334155', padding: '28px', borderRadius: '16px' }}>
-              <div style={{ fontSize: '28px', marginBottom: '16px' }}>📂</div>
-              <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '10px' }}>Organized Collections</h3>
-              <p style={{ color: '#94a3b8', fontSize: '14px', lineHeight: '1.6' }}>Your links, titles, and custom slugs are sorted into clean, easy-to-manage dashboard panels.</p>
+            {/* Feature 3 */}
+            <div style={{ background: 'linear-gradient(145deg, #0f172a 0%, #090d16 100%)', border: '1px solid rgba(255, 255, 255, 0.08)', padding: '32px', borderRadius: '20px' }}>
+              <div style={{ fontSize: '30px', marginBottom: '18px' }}>🔗</div>
+              <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '10px', color: '#f3f4f6' }}>Custom Slugs & Routing</h3>
+              <p style={{ color: '#9ca3af', fontSize: '14px', lineHeight: '1.6' }}>Create custom vanity URLs and short slugs instantly with collision prevention checks.</p>
             </div>
 
-            {/* Card 4 */}
-            <div style={{ backgroundColor: '#1e293b', border: '1px solid #334155', padding: '28px', borderRadius: '16px' }}>
-              <div style={{ fontSize: '28px', marginBottom: '16px' }}>🌍</div>
-              <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '10px' }}>Access Anywhere</h3>
-              <p style={{ color: '#94a3b8', fontSize: '14px', lineHeight: '1.6' }}>Access your centralized link library and analytics from mobile, tablet, or desktop seamlessly.</p>
+            {/* Feature 4 */}
+            <div style={{ background: 'linear-gradient(145deg, #0f172a 0%, #090d16 100%)', border: '1px solid rgba(255, 255, 255, 0.08)', padding: '32px', borderRadius: '20px' }}>
+              <div style={{ fontSize: '30px', marginBottom: '18px' }}>☁️</div>
+              <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '10px', color: '#f3f4f6' }}>Cloud Native Deployment</h3>
+              <p style={{ color: '#9ca3af', fontSize: '14px', lineHeight: '1.6' }}>Seamlessly deployed across Vercel edge networks and Render cloud backend clusters.</p>
             </div>
 
           </div>
-        </div>
-      </section>
-
-      {/* Community / Newsletter Section */}
-      <section style={{ padding: '90px 20px', maxWidth: '1000px', margin: '0 auto' }}>
-        <div style={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '24px', padding: '50px', display: 'flex', flexWrap: 'wrap', gap: '40px', alignItems: 'center', justifyContent: 'space-between' }}>
-          
-          <div style={{ flex: '1 1 400px' }}>
-            <span style={{ fontSize: '12px', textTransform: 'uppercase', color: '#38bdf8', fontWeight: 'bold', letterSpacing: '1px' }}>Community</span>
-            <h2 style={{ fontSize: '30px', fontWeight: 'bold', margin: '10px 0 16px 0' }}>Join the LinkDrop Community</h2>
-            <p style={{ color: '#94a3b8', fontSize: '14px', marginBottom: '24px', lineHeight: '1.6' }}>
-              Get exclusive access to new features, dashboard tips, and developer updates directly.
-            </p>
-            <ul style={{ listStyle: 'none', padding: 0, color: '#cbd5e1', fontSize: '14px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <li>✓ Early access to advanced analytics features</li>
-              <li>✓ Custom slug optimization tips</li>
-              <li>✓ Security updates & best practices</li>
-            </ul>
-          </div>
-
-          <div style={{ flex: '1 1 300px', backgroundColor: '#0f172a', padding: '28px', borderRadius: '16px', border: '1px solid #334155' }}>
-            <p style={{ fontWeight: '600', marginBottom: '16px', fontSize: '16px' }}>Stay Updated</p>
-            <input type="email" placeholder="Enter your email address" style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #334155', backgroundColor: '#1e293b', color: '#fff', marginBottom: '14px', outline: 'none' }} />
-            <button style={{ width: '100%', backgroundColor: '#2563eb', color: '#fff', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: '600', cursor: 'pointer' }}>
-              Subscribe Now
-            </button>
-          </div>
-
         </div>
       </section>
 
       {/* Footer */}
-      <footer style={{ textAlign: 'center', padding: '30px', borderTop: '1px solid #1e293b', color: '#64748b', fontSize: '13px' }}>
-        <p>© 2026 LinkDrop. All rights reserved. Powered by MERN Stack & Vercel.</p>
+      <footer style={{ textAlign: 'center', padding: '40px 20px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', color: '#6b7280', fontSize: '13px', backgroundColor: '#020617' }}>
+        <p>© 2026 LinkDrop Inc. Engineered with precision for modern creators.</p>
       </footer>
 
     </div>
