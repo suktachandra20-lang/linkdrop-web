@@ -1,251 +1,169 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-const API_URL = import.meta.env.VITE_API_URL || 'https://linkdrop-web.onrender.com/api';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const [links, setLinks] = useState([]);
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
-  const [slug, setSlug] = useState(''); 
-  const [user, setUser] = useState(null); // 
-  const [copied, setCopied] = useState(false);
-  
-  
-  const [analyticsData, setAnalyticsData] = useState([]);
-  const [selectedLinkTitle, setSelectedLinkTitle] = useState('');
-  const [showModal, setShowModal] = useState(false);
-
+  const [slug, setSlug] = useState('');
+  const [error, setError] = useState('');
+  const [username, setUsername] = useState('xor');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userData = localStorage.getItem('user');
     const token = localStorage.getItem('token');
-
-    if (!token || !userData) {
+    if (!token) {
       navigate('/login');
       return;
     }
 
-    setUser(JSON.parse(userData));
-    fetchLinks(token);
+    // Fetch user links
+    fetch('https://linkdrop-web.onrender.com/api/links', {
+      headers: { 'x-auth-token': token }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setLinks(data);
+      })
+      .catch(err => console.error(err));
   }, [navigate]);
-
-  const fetchLinks = async (token) => {
-    try {
-      const res = await fetch(`${API_URL}/links`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const data = await res.json();
-      if (res.ok) setLinks(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const handleAddLink = async (e) => {
     e.preventDefault();
+    setError('');
     const token = localStorage.getItem('token');
 
     try {
-      const res = await fetch(`${API_URL}/links`, {
+      const res = await fetch('https://linkdrop-web.onrender.com/api/links', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          'x-auth-token': token
         },
-        body: JSON.stringify({ title, url, slug: slug.trim() ? slug : undefined })
+        body: JSON.stringify({ title, url, slug })
       });
 
       const data = await res.json();
-      if (res.ok) {
-        setLinks([...links, data.newLink || data]);
+      if (!res.ok) {
+        setError(data.error || 'Failed to add link');
+      } else {
+        setLinks([data, ...links]);
         setTitle('');
         setUrl('');
         setSlug('');
-      } else {
-        alert(data.error || 'Failed to create link');
       }
     } catch (err) {
-      console.error(err);
+      setError('Server error');
     }
   };
 
   const handleDelete = async (id) => {
     const token = localStorage.getItem('token');
-    try {
-      const res = await fetch(`${API_URL}/links/${id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` }
-      });
-
-      if (res.ok) {
-        setLinks(links.filter((link) => link._id !== id));
-      }
-    } catch (err) {
-      console.error(err);
+    const res = await fetch(`https://linkdrop-web.onrender.com/api/links/${id}`, {
+      method: 'DELETE',
+      headers: { 'x-auth-token': token }
+    });
+    if (res.ok) {
+      setLinks(links.filter(l => l._id !== id));
     }
   };
 
-  const fetchAnalytics = async (linkId, linkTitle) => {
-    try {
-      const token = localStorage.getItem('token');
-      const res = await fetch(`${API_URL}/analytics/${linkId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setAnalyticsData(data);
-        setSelectedLinkTitle(linkTitle);
-        setShowModal(true);
-      } else {
-        alert(data.error || 'Could not load analytics.');
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Could not load analytics.');
-    }
-  };
-
-  const copyPublicLink = () => {
-    const publicUrl = `${window.location.origin}/u/${user?.username}`;
-    navigator.clipboard.writeText(publicUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate('/login');
-  };
+  const totalClicks = links.reduce((sum, link) => sum + (link.clicks || 0), 0);
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#0f172a', color: '#f8fafc', padding: '24px 16px', fontFamily: 'system-ui, sans-serif' }}>
-      <div style={{ maxWidth: '640px', margin: '0 auto' }}>
-        
-        {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-          <div>
-            <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#818cf8', margin: 0 }}>
-              Welcome, {user?.username || 'User'} 👋
-            </h1>
-            <p style={{ fontSize: '14px', color: '#94a3b8', margin: '4px 0 0 0' }}>Manage your links & track performance</p>
-          </div>
-          <button onClick={handleLogout} style={{ padding: '8px 16px', backgroundColor: '#ef4444', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>
+    <div style={{ backgroundColor: '#030712', color: '#f9fafb', minHeight: '100vh', fontFamily: 'system-ui, sans-serif', paddingBottom: '60px' }}>
+      
+      {/* Top Header */}
+      <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 40px', borderBottom: '1px solid rgba(255,255,255,0.08)', backgroundColor: 'rgba(3,7,18,0.9)', backdropFilter: 'blur(10px)' }}>
+        <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          ⚡ LinkDrop
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <span style={{ fontSize: '14px', color: '#9ca3af' }}>Welcome, <strong style={{ color: '#fff' }}>{username}</strong> 👋</span>
+          <button onClick={() => { localStorage.removeItem('token'); navigate('/login'); }} style={{ backgroundColor: '#ef4444', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}>
             Logout
           </button>
         </div>
+      </nav>
 
-        {/* Public Bio Share Box */}
-        {user?.username && (
-          <div style={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '12px', padding: '16px', marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <span style={{ fontSize: '12px', color: '#94a3b8', display: 'block' }}>Your Public Bio Link:</span>
-              <a href={`/u/${user.username}`} target="_blank" rel="noreferrer" style={{ color: '#38bdf8', fontSize: '14px', textDecoration: 'none', fontWeight: '600' }}>
-                {window.location.origin}/u/{user.username}
-              </a>
+      {/* Main Container with Sidebar Layout */}
+      <div style={{ maxWidth: '1200px', margin: '40px auto', padding: '0 20px', display: 'grid', gridTemplateColumns: '1fr 300px', gap: '30px' }}>
+        
+        {/* Left Main Content */}
+        <div>
+          {/* Stats Overview Cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '35px' }}>
+            <div style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', padding: '24px', borderRadius: '16px' }}>
+              <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '8px', textTransform: 'uppercase' }}>Total Active Links</p>
+              <h2 style={{ fontSize: '32px', fontWeight: '800', color: '#38bdf8' }}>{links.length}</h2>
             </div>
-            <button onClick={copyPublicLink} style={{ padding: '8px 12px', backgroundColor: copied ? '#10b981' : '#334155', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '13px' }}>
-              {copied ? 'Copied! ✨' : 'Copy Bio Link'}
+            <div style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', padding: '24px', borderRadius: '16px' }}>
+              <p style={{ fontSize: '13px', color: '#9ca3af', marginBottom: '8px', textTransform: 'uppercase' }}>Global Lifetime Clicks</p>
+              <h2 style={{ fontSize: '32px', fontWeight: '800', color: '#4ade80' }}>{totalClicks}</h2>
+            </div>
+          </div>
+
+          {/* Public Bio Link Box */}
+          <div style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', padding: '20px 24px', borderRadius: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '35px' }}>
+            <div>
+              <p style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '4px' }}>Your Public Bio Link:</p>
+              <code style={{ color: '#38bdf8', fontSize: '14px' }}>https://linkdrop-web.vercel.app/u/{username}</code>
+            </div>
+            <button onClick={() => navigator.clipboard.writeText(`https://linkdrop-web.vercel.app/u/${username}`)} style={{ backgroundColor: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px' }}>
+              Copy Link
             </button>
           </div>
-        )}
 
-        {/* Add Link Form with Custom Slug */}
-        <form onSubmit={handleAddLink} style={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '12px', padding: '20px', marginBottom: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <h3 style={{ margin: '0 0 8px 0', fontSize: '16px', color: '#f8fafc' }}>Add New Link</h3>
-          <input 
-            type="text" 
-            placeholder="Link Title (e.g. My Portfolio)" 
-            value={title} 
-            onChange={(e) => setTitle(e.target.value)} 
-            required 
-            style={{ padding: '10px 14px', backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '8px', color: '#fff', outline: 'none' }} 
-          />
-          <input 
-            type="url" 
-            placeholder="URL (https://...)" 
-            value={url} 
-            onChange={(e) => setUrl(e.target.value)} 
-            required 
-            style={{ padding: '10px 14px', backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '8px', color: '#fff', outline: 'none' }} 
-          />
-          <input 
-            type="text" 
-            placeholder="Custom Slug / Short name (Optional, e.g. my-brand)" 
-            value={slug} 
-            onChange={(e) => setSlug(e.target.value)} 
-            style={{ padding: '10px 14px', backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '8px', color: '#fff', outline: 'none' }} 
-          />
-          <button type="submit" style={{ padding: '10px', backgroundColor: '#6366f1', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>Add Link</button>
-        </form>
+          {/* Add New Link Form */}
+          <div style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', padding: '28px', borderRadius: '16px', marginBottom: '35px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '20px' }}>Add New Link</h3>
+            {error && <p style={{ color: '#ef4444', marginBottom: '15px', fontSize: '14px' }}>{error}</p>}
+            <form onSubmit={handleAddLink} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <input type="text" placeholder="Link Title (e.g. My Portfolio)" value={title} onChange={(e) => setTitle(e.target.value)} required style={{ padding: '12px 16px', borderRadius: '10px', backgroundColor: '#030712', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', outline: 'none' }} />
+              <input type="url" placeholder="URL (https://...)" value={url} onChange={(e) => setUrl(e.target.value)} required style={{ padding: '12px 16px', borderRadius: '10px', backgroundColor: '#030712', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', outline: 'none' }} />
+              <input type="text" placeholder="Custom Slug (Optional, e.g. my-brand)" value={slug} onChange={(e) => setSlug(e.target.value)} style={{ padding: '12px 16px', borderRadius: '10px', backgroundColor: '#030712', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', outline: 'none' }} />
+              <button type="submit" style={{ backgroundColor: '#2563eb', color: '#fff', padding: '12px', borderRadius: '10px', border: 'none', fontWeight: '600', cursor: 'pointer', fontSize: '15px' }}>
+                Add Link
+              </button>
+            </form>
+          </div>
 
-        {/* Saved Links List */}
-        <h3 style={{ fontSize: '18px', marginBottom: '12px' }}>Your Saved Links</h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {links.length === 0 ? (
-            <p style={{ color: '#94a3b8', fontSize: '14px' }}>No links added yet.</p>
-          ) : (
-            links.map((item) => (
-              <div key={item._id} style={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '10px', padding: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          {/* Saved Links List */}
+          <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '20px' }}>Your Saved Links</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {links.map((link) => (
+              <div key={link._id} style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', padding: '20px', borderRadius: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                  <h4 style={{ margin: '0 0 4px 0', fontSize: '16px', color: '#38bdf8' }}>{item.title}</h4>
-                  <a href={item.url} target="_blank" rel="noreferrer" style={{ color: '#94a3b8', fontSize: '13px', textDecoration: 'none', display: 'block', marginBottom: '4px' }}>{item.url}</a>
-                  {item.slug && (
-                    <p style={{ fontSize: '12px', color: '#818cf8', margin: '0 0 4px 0' }}>Slug: /{item.slug}</p>
-                  )}
-                  <span style={{ fontSize: '12px', backgroundColor: '#334155', padding: '2px 8px', borderRadius: '4px', color: '#a5b4fc', fontWeight: 'bold', display: 'inline-block' }}>
-                    👆 {item.clicks || 0} Clicks
+                  <h4 style={{ fontSize: '16px', fontWeight: '600', color: '#38bdf8', marginBottom: '4px' }}>{link.title}</h4>
+                  <a href={link.url} target="_blank" rel="noopener noreferrer" style={{ color: '#9ca3af', fontSize: '13px', textDecoration: 'none', display: 'block', marginBottom: '8px' }}>{link.url}</a>
+                  <span style={{ backgroundColor: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8', padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: '600' }}>
+                    🔥 {link.clicks || 0} Clicks
                   </span>
                 </div>
-                
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  {/* Analytics Button */}
-                  <button onClick={() => fetchAnalytics(item._id, item.title)} style={{ padding: '6px 12px', backgroundColor: '#8b5cf6', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <button onClick={() => navigate(`/analytics/${link._id}`)} style={{ backgroundColor: '#334155', color: '#fff', border: 'none', padding: '8px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px' }}>
                     Analytics
                   </button>
-                  {/* Delete Button */}
-                  <button onClick={() => handleDelete(item._id)} style={{ padding: '6px 12px', backgroundColor: '#ef444422', color: '#f87171', border: '1px solid #ef4444', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }}>
+                  <button onClick={() => handleDelete(link._id)} style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '8px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px' }}>
                     Delete
                   </button>
                 </div>
               </div>
-            ))
-          )}
+            ))}
+          </div>
         </div>
 
-        {/* Analytics Modal */}
-        {showModal && (
-          <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.7)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000, padding: '16px' }}>
-            <div style={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '12px', padding: '24px', width: '100%', maxWidth: '500px', color: '#fff', maxHeight: '80vh', display: 'flex', flexDirection: 'column' }}>
-              <h2 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '4px', color: '#38bdf8' }}>Analytics: {selectedLinkTitle}</h2>
-              <p style={{ fontSize: '13px', color: '#94a3b8', marginBottom: '16px' }}>Detailed visitor device & location logs</p>
-
-              <div style={{ overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '8px', paddingRight: '4px' }}>
-                {analyticsData.length === 0 ? (
-                  <p style={{ color: '#94a3b8', textAlign: 'center', padding: '20px 0', fontSize: '14px' }}>No click analytics recorded yet.</p>
-                ) : (
-                  analyticsData.map((stat, idx) => (
-                    <div key={idx} style={{ backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '8px', padding: '10px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '13px' }}>
-                      <div>
-                        <p style={{ margin: '0 0 2px 0' }}>💻 <strong>{stat.device}</strong> ({stat.browser} / {stat.os})</p>
-                        <p style={{ margin: 0, color: '#94a3b8' }}>📍 {stat.city || 'Unknown City'}, {stat.country || 'Unknown Country'}</p>
-                      </div>
-                      <div style={{ textAlign: 'right', fontSize: '11px', color: '#94a3b8' }}>
-                        {new Date(stat.createdAt).toLocaleDateString()}<br />
-                        {new Date(stat.createdAt).toLocaleTimeString()}
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-
-              <button onClick={() => setShowModal(false)} style={{ marginTop: '16px', padding: '10px', backgroundColor: '#ef4444', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', width: '100%' }}>
-                Close
-              </button>
+        {/* Right Sidebar (Quick Actions / Widgets) */}
+        <div>
+          <div style={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.08)', padding: '24px', borderRadius: '16px', position: 'sticky', top: '20px' }}>
+            <h4 style={{ fontSize: '15px', fontWeight: '700', marginBottom: '16px', color: '#f3f4f6' }}>Quick Actions</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '14px', color: '#9ca3af' }}>
+              <div style={{ padding: '10px', backgroundColor: '#030712', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>🎨 Design Customization</div>
+              <div style={{ padding: '10px', backgroundColor: '#030712', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>🌐 Domain Management</div>
+              <div style={{ padding: '10px', backgroundColor: '#030712', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>📈 Traffic Insights</div>
             </div>
           </div>
-        )}
+        </div>
 
       </div>
     </div>
